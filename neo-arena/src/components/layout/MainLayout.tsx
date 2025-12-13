@@ -1,11 +1,16 @@
 import React from 'react';
-import { Menu, User, Wallet } from 'lucide-react';
+import { Menu, User, Wallet, LogOut } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../auth/AuthContext';
 
 interface MainLayoutProps {
     children: React.ReactNode;
 }
 
 export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
+    const navigate = useNavigate();
+    const { user, logout } = useAuth();
+
     return (
         <div className="min-h-screen bg-slate-950 text-white font-sans selection:bg-arena-red selection:text-white">
             {/* Header */}
@@ -29,10 +34,24 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
                             <span className="font-mono font-medium text-arena-green">$5,000.00</span>
                         </div>
 
-                        {/* User Profile */}
-                        <button className="p-2 hover:bg-slate-800 rounded-full transition-colors relative group">
-                            <User className="w-5 h-5 text-slate-400 group-hover:text-white transition-colors" />
-                        </button>
+                        {/* User/Auth */}
+                        {user ? (
+                            <button
+                                onClick={logout}
+                                className="p-2 hover:bg-slate-800 rounded-full transition-colors relative group"
+                                title="Cerrar sesión"
+                            >
+                                <LogOut className="w-5 h-5 text-slate-400 group-hover:text-white transition-colors" />
+                            </button>
+                        ) : (
+                            <button
+                                onClick={() => navigate('/login')}
+                                className="p-2 hover:bg-slate-800 rounded-full transition-colors relative group"
+                                title="Iniciar sesión"
+                            >
+                                <User className="w-5 h-5 text-slate-400 group-hover:text-white transition-colors" />
+                            </button>
+                        )}
 
                         {/* Menu Toggle */}
                         <button className="p-2 hover:bg-slate-800 rounded-full transition-colors">
